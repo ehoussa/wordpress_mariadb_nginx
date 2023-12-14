@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb
+    container_name: mariadb
+    build: ./requirements/mariadb/
+    env_file:
+      - .env
+    networks:
+      - my_inception
+    restart: always
+    volumes:
+      - /home/ebakchic/data/mariadb:/var/lib/mysql
+  nginx:
+    image: nginx
+    container_name: nginx
+    build: ./requirements/nginx/
+    ports:
+      - 443:443
+    depends_on:
+      - wordpress
+    networks:
+      - my_inception
+    env_file:
+      - .env
+    restart: always
+    volumes:
+      - /home/ebakchic/data/wordpress:/var/www/html
+  wordpress:
+    image: wordpress
+    container_name: wordpress
+    build: ./requirements/wordpress/
+    env_file:
+      - .env
+    depends_on:
+      - mariadb
+    networks:
+      - my_inception
+    restart: always
+    volumes:
+      - /home/ebakchic/data/wordpress:/var/www/html
+
+networks:
+  my_inception:
+    driver: bridge
