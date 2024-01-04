@@ -15,4 +15,4 @@ start :
 status : 
 	@docker ps
 
-.PHONY: all re down clean remove
+.PHONY: all up down stop start status
